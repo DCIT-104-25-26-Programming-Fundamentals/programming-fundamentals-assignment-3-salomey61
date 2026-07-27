@@ -60,3 +60,65 @@
 // =============================================================================
 
 
+const readlineSync = require('readline-sync');
+/**
+ * Prints the multiplication table for a single number n from 1 to 12.
+ * 
+ * @param {number} n - The target number.
+ */
+function printTable(n) {
+    console.log(`Multiplication Table for ${n}:`);
+    for (let i = 1; i <= 12; i++) {
+        const product = n * i;
+        const numStr = String(n).padEnd(2, ' ');
+        const iStr = String(i).padEnd(2, ' ');
+        console.log(`${numStr} x  ${iStr} =  ${product}`);
+    }
+}
+/**
+ * Prints multiplication tables for every number from 1 to n (1 to 12 each),
+ * separated by a divider line.
+ * 
+ * @param {number} n - The upper bound number.
+ */
+function printAllTables(n) {
+    for (let number = 1; number <= n; number++) {
+        printTable(number);
+        // Add separator between tables (except after the final table)
+        if (number < n) {
+            console.log('-'.repeat(27));
+        }
+    }
+}
+/**
+ * Main application driver function.
+ */
+function main() {
+    console.log('='.repeat(45));
+    console.log('     MULTIPLICATION TABLE GENERATOR');
+    console.log('='.repeat(45));
+    // -------------------------------------------------------------------------
+    // PART A — Single Table
+    // -------------------------------------------------------------------------
+    console.log('\n--- PART A: Single Multiplication Table ---');
+    const number = readlineSync.questionInt('Enter a number: ');
+    if (number <= 0) {
+        console.log('Error: Please enter a positive integer.');
+    } else {
+        console.log();
+        printTable(number);
+    }
+    // -------------------------------------------------------------------------
+    // PART B — Tables from 1 to N
+    // -------------------------------------------------------------------------
+    console.log('\n--- PART B: Multiplication Tables from 1 to N ---');
+    const n = readlineSync.questionInt('Enter number N: ');
+    if (n <= 0) {
+        console.log('Error: Please enter a positive integer.');
+    } else {
+        console.log();
+        printAllTables(n);
+    }
+}
+// Execute program
+main();

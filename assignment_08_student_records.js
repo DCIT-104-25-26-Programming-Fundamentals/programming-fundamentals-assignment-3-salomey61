@@ -84,4 +84,136 @@
 // YOUR CODE BELOW — remove the // symbols from the scaffold and fill it in
 // =============================================================================
 
+const readlineSync = require('readline-sync');
 
+function showMenu() {
+    console.log('\n==============================');
+    console.log('   STUDENT RECORD SYSTEM MENU');
+    console.log('==============================');
+    console.log('1. Add student');
+    console.log('2. Display all students');
+    console.log('3. Calculate average score');
+    console.log('4. Quit');
+}
+/**
+ * Calculates the average of a numerical score array.
+ * 
+ * @param {number[]} scores - Array of numerical scores.
+ * @returns {number} Average score.
+ */
+function calculateAvg(scores) {
+    if (!scores || scores.length === 0) return 0.0;
+    let sum = 0;
+    for (let i = 0; i < scores.length; i++) {
+        sum += scores[i];
+    }
+    return sum / scores.length;
+}
+/**
+ * Prompts for student details (Name, ID, scores) and adds an object to the list.
+ * 
+ * @param {Object[]} students - List of student objects.
+ */
+function addStudent(students) {
+    const name = readlineSync.question('Student name: ').trim();
+    if (name.length === 0) {
+        console.log('Error: Student name cannot be empty.');
+        return;
+    }
+    const studentId = readlineSync.question('Student ID: ').trim();
+    if (studentId.length === 0) {
+        console.log('Error: Student ID cannot be empty.');
+        return;
+    }
+    // Check for duplicate student ID
+    for (let i = 0; i < students.length; i++) {
+        if (String(students[i].id) === studentId) {
+            console.log(`Error: Student ID ${studentId} already exists.`);
+            return;
+        }
+    }
+    const numScores = readlineSync.questionInt('How many scores? ');
+    if (numScores <= 0) {
+        console.log('Error: Number of scores must be a positive integer.');
+        return;
+    }
+    const scores = [];
+    for (let i = 1; i <= numScores; i++) {
+        const score = readlineSync.questionFloat(`Enter score ${i}: `);
+        scores.push(score);
+    }
+    const studentRecord = {
+        name: name,
+        id: studentId,
+        scores: scores
+    };
+    students.push(studentRecord);
+    console.log(`Student "${name}" added successfully.`);
+}
+/**
+ * Prints a formatted table showing every student's details and average.
+ * 
+ * @param {Object[]} students - List of student objects.
+ */
+function displayAllStudents(students) {
+    if (students.length === 0) {
+        console.log('\nNo student records found!');
+        return;
+    }
+    const divider = '-'.repeat(54);
+    console.log('\n' + divider);
+    console.log(`${'Name'.padEnd(15)} ${'ID'.padEnd(12)} ${'Scores'.padEnd(15)} ${'Average'.padEnd(8)}`);
+    console.log(divider);
+    for (let i = 0; i < students.length; i++) {
+        const s = students[i];
+        const scoresStr = s.scores.join(', ');
+        const avg = calculateAvg(s.scores).toFixed(2);
+        console.log(`${s.name.padEnd(15)} ${String(s.id).padEnd(12)} ${scoresStr.padEnd(15)} ${avg.padEnd(8)}`);
+    }
+    console.log(divider);
+}
+/**
+ * Searches for a student by ID and prints their average score.
+ * 
+ * @param {Object[]} students - List of student objects.
+ */
+function calculateStudentAverage(students) {
+    if (students.length === 0) {
+        console.log('\nNo student records found!');
+        return;
+    }
+    const searchId = readlineSync.question('Enter student ID: ').trim();
+    for (let i = 0; i < students.length; i++) {
+        const s = students[i];
+        if (String(s.id) === searchId) {
+            const avg = calculateAvg(s.scores).toFixed(2);
+            console.log(`${s.name}'s average score: ${avg}`);
+            return;
+        }
+    }
+    console.log(`Error: Student with ID '${searchId}' not found.`);
+}
+/**
+ * Main application loop.
+ */
+function main() {
+    const students = [];
+    while (true) {
+        showMenu();
+        const choice = readlineSync.question('Enter your choice (1-4): ').trim();
+        if (choice === '1') {
+            addStudent(students);
+        } else if (choice === '2') {
+            displayAllStudents(students);
+        } else if (choice === '3') {
+            calculateStudentAverage(students);
+        } else if (choice === '4') {
+            console.log('Goodbye!');
+            break;
+        } else {
+            console.log('Error: Invalid choice! Please enter a number between 1 and 4.');
+        }
+    }
+}
+// Execute program
+main();

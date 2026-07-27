@@ -44,3 +44,80 @@
 // =============================================================================
 
 
+const readlineSync = require('readline-sync');
+/**
+ * Calculates the sum of numbers in an array using a loop.
+ * 
+ * @param {number[]} numbers - Array of numbers.
+ * @returns {number} Sum of numbers.
+ */
+function calculateSum(numbers) {
+    let total = 0;
+    for (let i = 0; i < numbers.length; i++) {
+        total += numbers[i];
+    }
+    return total;
+}
+/**
+ * Calculates the average of numbers in an array.
+ * 
+ * @param {number[]} numbers - Array of numbers.
+ * @returns {number} Average of numbers.
+ */
+function calculateAverage(numbers) {
+    if (numbers.length === 0) return 0;
+    return calculateSum(numbers) / numbers.length;
+}
+/**
+ * Finds the maximum value in an array using a loop.
+ * 
+ * @param {number[]} numbers - Array of numbers.
+ * @returns {number} Maximum value.
+ */
+function findMaximum(numbers) {
+    let maxVal = numbers[0];
+    for (let i = 1; i < numbers.length; i++) {
+        if (numbers[i] > maxVal) {
+            maxVal = numbers[i];
+        }
+    }
+    return maxVal;
+}
+/**
+ * Finds the minimum value in an array using a loop.
+ * 
+ * @param {number[]} numbers - Array of numbers.
+ * @returns {number} Minimum value.
+ */
+function findMinimum(numbers) {
+    let minVal = numbers[0];
+    for (let i = 1; i < numbers.length; i++) {
+        if (numbers[i] < minVal) {
+            minVal = numbers[i];
+        }
+    }
+    return minVal;
+}
+/**
+ * Main function to drive the application.
+ */
+function main() {
+    const count = readlineSync.questionInt('How many numbers? ');
+    // Validation: N must be a positive integer
+    if (count <= 0) {
+        console.log('Error: Number of elements must be a positive integer.');
+        return;
+    }
+    const numbers = [];
+    for (let i = 1; i <= count; i++) {
+        const num = readlineSync.questionFloat(`Enter number ${i}: `);
+        numbers.push(num);
+    }
+    console.log('\nResults:');
+    console.log(`Sum:     ${calculateSum(numbers)}`);
+    console.log(`Average: ${calculateAverage(numbers)}`);
+    console.log(`Maximum: ${findMaximum(numbers)}`);
+    console.log(`Minimum: ${findMinimum(numbers)}`);
+}
+// Execute the program
+main();
